@@ -30,7 +30,19 @@ def add_box( points, x, y, z, width, height, depth ):
   # Returns a matrix of those points
   # ====================
 def generate_sphere( points, cx, cy, cz, r, step ):
-    pass
+    matrix = []
+    rotation = 0
+    circle = 0
+    while rotation <= 1:
+        while circle <= 1:
+            x = r * math.cos(math.pi * circle) + cx
+            y = r * math.sin(math.pi * circle) * math.cos(2 * math.pi * rotation) + cy
+            z = r * math.sin(math.pi * circle) * math.sin(2 * math.pi * rotation) + cz
+            add_point(matrix, x, y, z)
+            circle += step
+        rotation += step
+        circle = 0
+    return matrix
 
   # ====================
   # adds all the points for a sphere with center
@@ -39,8 +51,9 @@ def generate_sphere( points, cx, cy, cz, r, step ):
   # necessary points
   # ====================
 def add_sphere( points, cx, cy, cz, r, step ):
-    pass
-
+    matrix = generate_sphere(points, cx, cy, cz, r, step)
+    for p in matrix:
+        add_edge(points, p[0], p[1], p[2], p[0], p[1], p[2])
 
   # ====================
   # Generates all the points along the surface
@@ -49,7 +62,19 @@ def add_sphere( points, cx, cy, cz, r, step ):
   # Returns a matrix of those points
   # ====================
 def generate_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
+    matrix = []
+    rotation = 0
+    circle = 0
+    while rotation <= 1:
+        while circle <= 1:
+            x = math.cos(2 * math.pi * rotation) * (r0 * math.cos(2 * math.pi * circle) + r1) + cx
+            y = r0 * math.sin(2 * math.pi * circle) + cy
+            z = -1 * math.sin(2 * math.pi * rotation) * (r0 * math.cos(2 * math.pi * circle) + r1) + cz
+            add_point(matrix, x, y, z)
+            circle += step
+        rotation += step
+        circle = 0
+    return matrix
 
   # ====================
   # adds all the points for a torus with center
@@ -58,9 +83,9 @@ def generate_torus( points, cx, cy, cz, r0, r1, step ):
   # necessary points
   # ====================
 def add_torus( points, cx, cy, cz, r0, r1, step ):
-    pass
-
-
+    matrix = generate_torus(points, cx, cy, cz, r0, r1, step)
+    for p in matrix:
+        add_edge(points, p[0], p[1], p[2], p[0], p[1], p[2])
 
 def add_circle( points, cx, cy, cz, r, step ):
     x0 = r + cx
